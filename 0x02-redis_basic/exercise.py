@@ -29,12 +29,21 @@ class Cache:
 
         return key
 
-    def get(self, key: str, fn: Union[Callable[[Any], int], None]) -> Any:
+    def get(self, key: str,
+            fn: Union[Callable[[Any], int], None] = None) -> Any:
         """
         returns output in correct format
         """
         value = self._redis.get(key)
-        if fn is not None:
+        if value is not None and fn is not None:
             decoded = fn(value)
             return decoded
         return value
+
+    def get_str(self, key: str) -> Union[str, None]:
+        """convert byte stream to string"""
+        return self.get(key, fn=lambda d: d.decode('utf8'))
+
+    def get_int(self, key: str) -> Union[int, None]:
+        """convert byte stream to int"""
+        return self.get(key, fn=int)
