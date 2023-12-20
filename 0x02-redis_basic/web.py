@@ -17,10 +17,20 @@ def access_count(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(url):
         cache = redis.Redis()
-        key = "count:{}".format(url)
-        cache.incr(key)
-        cache.expire(key, 10)
-        return method(url)
+        # check if there is cached content and return it for slow connection
+        content_key = "html:{}".format(url)
+        counter_key = "count:{}".format(url)
+
+        data = cache.get(content_key)
+        if data is not None:
+            return data.decode("utf-8")
+        else:
+            # cache is expired, fetch new content and cache it
+            fresh_content = method(url)
+            cache.set(content_key, fresh_content)
+            cache.incr(counter_key)
+            cache.expire(content_key, 10)
+            return fresh_content
 
     return wrapper
 
