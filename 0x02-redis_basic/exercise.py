@@ -16,7 +16,7 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self: 'Cache', *args, **kwds):
         # get redis instance defined in Cache here
-        self._redis.incr(method.__qualname__, 1)
+        self._redis.incr(method.__qualname__)
         return method(self, *args, **kwds)
     return wrapper
 
@@ -25,8 +25,6 @@ class Cache:
     """
     This is a cache implementation based on Redis
     """
-    _redis: redis.Redis
-
     def __init__(self) -> None:
         """Initializes a redis instance"""
         self._redis = redis.Redis()
