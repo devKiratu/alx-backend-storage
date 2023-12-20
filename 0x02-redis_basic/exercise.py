@@ -4,7 +4,7 @@ This module defines a cache layer built on top of Redis for exploring redis
 for basic operations and using it as a simple cache
 """
 import redis
-from typing import Union
+from typing import Union, Callable, Any
 import uuid
 
 
@@ -28,3 +28,13 @@ class Cache:
         self._redis.set(key, data)
 
         return key
+
+    def get(self, key: str, fn: Union[Callable[[Any], int], None]) -> Any:
+        """
+        returns output in correct format
+        """
+        value = self._redis.get(key)
+        if fn is not None:
+            decoded = fn(value)
+            return decoded
+        return value
