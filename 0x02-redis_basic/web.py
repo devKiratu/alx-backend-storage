@@ -16,6 +16,7 @@ def access_count(method: Callable) -> Callable:
     """
     @wraps(method)
     def wrapper(url):
+        """decorator implementation"""
         cache = redis.Redis()
         # check if there is cached content and return it for slow connection
         content_key = "html:{}".format(url)
@@ -27,8 +28,8 @@ def access_count(method: Callable) -> Callable:
         else:
             # cache is expired, fetch new content and cache it
             fresh_content = method(url)
-            cache.set(content_key, fresh_content)
             cache.incr(counter_key)
+            cache.set(content_key, fresh_content)
             cache.expire(content_key, 10)
             return fresh_content
 
