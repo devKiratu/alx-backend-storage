@@ -9,6 +9,8 @@ import redis
 from functools import wraps
 from typing import Callable
 
+cache = redis.Redis()
+
 
 def access_count(method: Callable) -> Callable:
     """
@@ -17,7 +19,6 @@ def access_count(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(url):
         """decorator implementation"""
-        cache = redis.Redis()
         # check if there is cached content and return it for slow connection
         content_key = "html:{}".format(url)
         counter_key = "count:{}".format(url)
