@@ -6,6 +6,19 @@ for basic operations and using it as a simple cache
 import redis
 from typing import Union, Callable, Any
 import uuid
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    """
+    decorator to count the number of times a function is called
+    """
+    @wraps(method)
+    def wrapper(self: 'Cache', *args, **kwds):
+        # get redis instance defined in Cache here
+        self._redis.incr(method.__qualname__, 1)
+        return method(self, *args, **kwds)
+    return wrapper
 
 
 class Cache:
@@ -19,7 +32,8 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: Union[str, int, float, bytes]) -> str:
+    @count_calls
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         stores data in a Redis database using a random key and returns
         the key
@@ -30,7 +44,7 @@ class Cache:
         return key
 
     def get(self, key: str,
-            fn: Union[Callable[[Any], int], None] = None) -> Any:
+            fn: Union[Callable, None] = None) -> Any:
         """
         returns output in correct format
         """
