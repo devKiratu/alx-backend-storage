@@ -51,9 +51,12 @@ def replay(fn: Callable) -> None:
 
     print("{} was called {} times".format(fn_name, len(list(inputs))))
     for i, j in list(zip(inputs, outputs)):
-        input = i.decode('utf8')
-        output = j.decode('utf8')
-        print("{}(*{}) -> {}".format(fn_name, input, output))
+        try:
+            input = i.decode('utf8')
+            output = j.decode('utf8')
+            print("{}(*{}) -> {}".format(fn_name, input, output))
+        except Exception:
+            print("{}(*{}) -> {}".format(fn_name, "", ""))
 
 
 class Cache:
