@@ -5,6 +5,7 @@ Main file
 import redis
 
 Cache = __import__('exercise').Cache
+replay = __import__('exercise').replay
 
 cache = Cache()
 
@@ -36,15 +37,22 @@ cache = Cache()
 # print(cache.get(cache.store.__qualname__))
 
 # Task 3 test cases
-s1 = cache.store("first")
-print(s1)
-s2 = cache.store("secont")
-print(s2)
-s3 = cache.store("third")
-print(s3)
+# s1 = cache.store("first")
+# print(s1)
+# s2 = cache.store("secont")
+# print(s2)
+# s3 = cache.store("third")
+# print(s3)
 
-inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
-outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
+# inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
+# outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
 
-print("inputs: {}".format(inputs))
-print("outputs: {}".format(outputs))
+# print("inputs: {}".format(inputs))
+# print("outputs: {}".format(outputs))
+
+
+# Task 4 test cases
+s1 = cache.store("foo")
+s2 = cache.store("bar")
+s3 = cache.store("42")
+replay(cache.store)
