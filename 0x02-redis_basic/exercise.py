@@ -1,6 +1,7 @@
 #!usr/bin/env python3
 """
-This module defines a cache layer built on top of Redis
+This module defines a cache layer built on top of Redis for exploring redis
+for basic operations and using it as a simple cache
 """
 import redis
 from typing import Union
