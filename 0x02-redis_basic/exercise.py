@@ -11,6 +11,8 @@ class Cache:
     """
     This is a cache implementation based on Redis
     """
+    _redis: redis.Redis
+
     def __init__(self):
         """Initializes a redis instance"""
         self._redis = redis.Redis()
@@ -21,7 +23,7 @@ class Cache:
         stores data in a Redis database using a random key and returns
         the key
         """
-        key = str(uuid.uuid4())
+        key: str = str(uuid.uuid4())
         self._redis.set(key, data)
 
         return key
