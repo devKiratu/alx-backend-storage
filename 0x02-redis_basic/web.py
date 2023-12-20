@@ -20,7 +20,7 @@ def access_count(method: Callable) -> Callable:
     def wrapper(url):
         """decorator implementation"""
         # check if there is cached content and return it for slow connection
-        content_key = "cached:{}".format(url)
+        content_key = "html:{}".format(url)
         counter_key = "count:{}".format(url)
 
         data = cache.get(content_key)
@@ -30,7 +30,7 @@ def access_count(method: Callable) -> Callable:
             # cache is expired, fetch new content and cache it
             fresh_content = method(url)
             cache.incr(counter_key)
-            cache.set(content_key, fresh_content, ex=10)
+            cache.set(content_key, fresh_content)
             cache.expire(content_key, 10)
             return fresh_content
 
