@@ -30,7 +30,7 @@ def access_count(method: Callable) -> Callable:
             # cache is expired, fetch new content and cache it
             fresh_content = method(url)
             cache.incr(counter_key)
-            cache.set(content_key, fresh_content)
+            cache.set(content_key, fresh_content, ex=10)
             cache.expire(content_key, 10)
             return fresh_content
 
