@@ -26,7 +26,7 @@ def access_count(method: Callable) -> Callable:
         data = cache.get(content_key)
         if data:
             return data.decode("utf-8")
-        
+
         # cache is expired, fetch new content and cache it
         fresh_content = method(url)
         cache.incr(counter_key)
