@@ -7,14 +7,13 @@ HTML content of a particular URL and returns it.
 import requests
 import redis
 
-cache = redis.Redis()
-
 
 def get_page(url: str) -> str:
     """
     tracks how many times a particular URL was accessed in the key
     "count:{url}" and cache the result with an expiration time of 10 seconds.
     """
+    cache = redis.Redis()
     content_key = "html:{}".format(url)
     counter_key = "count:{}".format(url)
     # increment url counter
