@@ -50,7 +50,7 @@ def replay(fn: Callable) -> None:
     inputs = cache.lrange("{}:inputs".format(fn_name), 0, -1)
     outputs = cache.lrange("{}:outputs".format(fn_name), 0, -1)
 
-    print("{} was called {} times".format(fn_name, len(list(inputs))))
+    print("{} was called {} times:".format(fn_name, len(list(inputs))))
     for i, j in list(zip(inputs, outputs)):
         try:
             input = i.decode('utf8')
