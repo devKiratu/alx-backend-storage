@@ -24,15 +24,15 @@ def access_count(method: Callable) -> Callable:
         counter_key = "count:{}".format(url)
 
         data = cache.get(content_key)
-        if data is not None:
+        if data:
             return data.decode("utf-8")
-        else:
-            # cache is expired, fetch new content and cache it
-            fresh_content = method(url)
-            cache.incr(counter_key)
-            cache.set(content_key, fresh_content)
-            cache.expire(content_key, 10)
-            return fresh_content
+        
+        # cache is expired, fetch new content and cache it
+        fresh_content = method(url)
+        cache.incr(counter_key)
+        cache.set(content_key, fresh_content)
+        cache.expire(content_key, 10)
+        return fresh_content
 
     return wrapper
 
