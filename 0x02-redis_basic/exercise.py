@@ -13,10 +13,11 @@ def count_calls(method: Callable) -> Callable:
     """
     decorator to count the number of times a function is called
     """
+    func_name = method.__qualname__
     @wraps(method)
     def wrapper(self: 'Cache', *args, **kwds):
         # get redis instance defined in Cache here
-        self._redis.incr(method.__qualname__)
+        self._redis.incr(func_name)
         return method(self, *args, **kwds)
     return wrapper
 
