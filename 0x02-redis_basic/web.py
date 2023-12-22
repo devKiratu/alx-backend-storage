@@ -22,6 +22,7 @@ def access_count(method: Callable) -> Callable:
         # check if there is cached content and return it for slow connection
         content_key = "html:{}".format(url)
         counter_key = "count:{}".format(url)
+        cache.incr(counter_key)
 
         data = cache.get(content_key)
         if data:
@@ -30,7 +31,6 @@ def access_count(method: Callable) -> Callable:
         # cache is expired, fetch new content and cache it
         fresh_content = method(url)
         cache.set(content_key, fresh_content, ex=10)
-        cache.incr(counter_key)
         return fresh_content
 
     return wrapper
